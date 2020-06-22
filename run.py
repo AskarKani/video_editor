@@ -6,9 +6,9 @@ if __name__ == '__main__':
     if sys.version_info[0] < 3:
         print("!!!WARNING!!! RUN with PYTHON 3...")
         sys.exit(1)
-    import lib.video_splitter as splitter
-    import lib.video_merger as merger
-    import lib.clean as clean
+    import library.video_splitter as splitter
+    import library.video_merger as merger
+    import library.clean as clean
 
     des = "!........................! VIDEO EDITOR !........................!\n " \
           "\rpython run.py -s -b split duration in seconds video_file\n" \
