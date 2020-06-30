@@ -5,6 +5,9 @@ import mimetypes
 
 
 def audio_cutter(file, start_time, end_time):
+    if end_time <= start_time:
+        print("Start time should be lesser than end time")
+        sys.exit(1)
     file_type = mimetypes.MimeTypes().guess_type(file)[0]
     out_path = Path(os.getcwd()) / "audio_out"
     if not os.path.isdir(out_path):
@@ -14,16 +17,10 @@ def audio_cutter(file, start_time, end_time):
         video = VideoFileClip(file)
         audio = video.audio.subclip(start_time, end_time)
         cut_audio = "cut" + os.path.splitext(os.path.basename(file))[0] + ".mp3"
-        print(cut_audio)
-
     elif "audio" in file_type:
         print(f"\nCutting the audio file: {file} from {str(start_time)} to {str(end_time)} seconds")
         audio = AudioFileClip(file).subclip(start_time, end_time)
         cut_audio = "cut" + os.path.basename(file)
-        print(cut_audio)
-
-
-
     out_file = out_path / cut_audio
     audio.write_audiofile(out_file)
 
@@ -40,7 +37,7 @@ def concatenate_audio(audio_files):
     out_file = out_path / "concatenate_audio.mp3"
     result = concatenate_audioclips(add_audio)
     result.write_audiofile(str(out_file))
-    
+
 
 def audio_extract(video_file):
     print("\nExtracting audio from the video " + str(video_file))
