@@ -30,6 +30,9 @@ def audio_cutter(file, start_time, end_time):
 
 def concatenate_audio(audio_files):
     print("\nConcatenating the audio files....")
+    if len(audio_files) < 2:
+        print("Pass atleast two files....\n")
+        sys.exit(1)
     add_audio = [AudioFileClip(file) for file in audio_files]
     out_path = Path(os.getcwd()) / "audio_out"
     if not os.path.isdir(out_path):
@@ -37,12 +40,7 @@ def concatenate_audio(audio_files):
     out_file = out_path / "concatenate_audio.mp3"
     result = concatenate_audioclips(add_audio)
     result.write_audiofile(str(out_file))
-
-    # add_audio_1 = AudioFileClip(audio_file)
-    # add_audio_2 = AudioFileClip(video_file)
-    # add_audio_3 = add_audio_1.set_duration(90)
-    # add_audio_3.write_audiofile("cut.mp3")
-
+    
 
 def audio_extract(video_file):
     print("\nExtracting audio from the video " + str(video_file))
