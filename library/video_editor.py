@@ -1,12 +1,17 @@
 import os, natsort, math
 from pathlib import Path
 from moviepy.editor import *
+import mimetypes
 
 
 
 
 
 def merger(input_path, out_file_name):
+    file_type = mimetypes.MimeTypes().guess_type(input_path)[0]
+    if "video" not in file_type:
+        print("Pass the valid video file as INPUT..")
+        sys.exit(1)
     video_files = os.listdir(input_path)
     current_dir = Path(os.getcwd()) / input_path
     files_sorted = natsort.natsorted(video_files)
@@ -37,6 +42,10 @@ def gen_file_name(index, file_path):
 
 
 def splitter(video_file, subclip_duration):
+    file_type = mimetypes.MimeTypes().guess_type(video_file)[0]
+    if "video" not in file_type:
+        print("Pass the valid video file as INPUT..")
+        sys.exit(1)
     video = VideoFileClip(video_file)
     fps = video.fps
     duration = int(video.duration)
@@ -73,12 +82,21 @@ def gen_video_with_audio_name(video_path, audio_path):
 
 
 def add_audio_to_video(video_file, audio_file):
+    files ={
+        "audio": audio_file,
+        "video": video_file
+    }
+    for name, file in files.items():
+        file_type = mimetypes.MimeTypes().guess_type(file)[0]
+        if name not in file_type:
+            print(f"Pass the valid {name} file as INPUT..")
+            sys.exit(1)
     print("\nAdding audio : " + str(audio_file) + " to video : " + str(video_file))
     video = VideoFileClip(video_file)
     add_audio = AudioFileClip(audio_file)
-    video.audio = add_audio
     duration = int(video.duration)
     video = video.subclip(0,duration)
+    video.audio = add_audio
     out_path = Path(os.getcwd()) / "video_out"
     if not os.path.isdir(out_path):
         os.mkdir(out_path)
