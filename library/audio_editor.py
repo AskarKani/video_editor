@@ -26,10 +26,14 @@ def audio_cutter(file, start_time, end_time):
 
 
 def concatenate_audio(audio_files):
+    print(audio_files)
     print("\nConcatenating the audio files....")
     if len(audio_files) < 2:
         print("Pass atleast two files....\n")
         sys.exit(1)
+    for file in audio_files:
+        if not "audio" in mimetypes.MimeTypes().guess_type(file)[0]:
+            print(f"PASS the valid audio file instead of {file}")
     add_audio = [AudioFileClip(file) for file in audio_files]
     out_path = Path(os.getcwd()) / "audio_out"
     if not os.path.isdir(out_path):
@@ -40,6 +44,10 @@ def concatenate_audio(audio_files):
 
 
 def audio_extract(video_file):
+    file_type = mimetypes.MimeTypes().guess_type(video_file)[0]
+    if "video" not in file_type:
+        print("Pass the valid video file as INPUT..")
+        sys.exit(1)
     print("\nExtracting audio from the video " + str(video_file))
     audio_name = os.path.splitext(os.path.basename(video_file))[0] + ".mp3"
     video = VideoFileClip(video_file)

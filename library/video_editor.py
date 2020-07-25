@@ -1,4 +1,4 @@
-import os, natsort, math
+import os, natsort, math, sys
 from pathlib import Path
 from moviepy.editor import *
 import mimetypes
@@ -9,12 +9,18 @@ import mimetypes
 
 def merger(input_path, out_file_name):
     file_type = mimetypes.MimeTypes().guess_type(input_path)[0]
-    if "video" not in file_type:
-        print("Pass the valid video file as INPUT..")
-        sys.exit(1)
+    # if "video" not in file_type:
+    #     print("Pass the valid video file as INPUT..")
+    #     sys.exit(1)
     video_files = os.listdir(input_path)
+    for file in video_files:
+        file_type = mimetypes.MimeTypes().guess_type(file)[0]
+        if "video" not in file_type:
+            print("Pass the valid video file as INPUT..")
+            sys.exit(1)
     current_dir = Path(os.getcwd()) / input_path
     files_sorted = natsort.natsorted(video_files)
+    print(files_sorted)
 
     list_video = [VideoFileClip(str(current_dir / file)) for file in files_sorted]
 
